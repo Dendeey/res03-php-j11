@@ -2,10 +2,14 @@
 
 class User
 {
+    // Attributs //
+    
     private int $id;
     private string $email;
     private string $username;
     private string $password;
+    
+    // Constructor //
     
     public function __construct(string $email,string $username, string $password)
     {

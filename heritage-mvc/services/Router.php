@@ -3,22 +3,17 @@
 class Router
 {
     
+    // Attributs //
+    
     private UserController $usercontroller;
+    
+    // Constructor //
     
     public function __construct()
     {
         $this->usercontroller = new UserController();
         
     }
-    
-    // PUBLIC GETTERS //
-    
-    
-    
-    
-    // PUBLIC SETTERS //
-    
-    
     
     
     // METHODES //

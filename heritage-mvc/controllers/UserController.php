@@ -1,9 +1,17 @@
 <?php
 
-class UserController
+class UserController extends AbstractController
 {
+    // Attributs //
+    
+    private UserManager $manager;
+    
+    // Constructor //
+    
     public function __construct()
     {
+        
+        $this->manager = new UserManager();
         
     }
     
@@ -11,15 +19,15 @@ class UserController
     
     public function index()
     {
-        
+        $this->render();
     }
     
-    public function create()
+    public function create(array $post)
     {
         
     }
     
-    public function edit()
+    public function edit(array $post)
     {
         
     }
