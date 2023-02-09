@@ -1,5 +1,10 @@
 <?php
 
+// Requires //
+
+require "AbstractManager.php";
+require "./models/User.php";
+
 class UserManager extends AbstractManager
 {
     
@@ -10,17 +15,20 @@ class UserManager extends AbstractManager
         
         $this->db;
         
-        $query = $db->prepare('SELECT * FROM users');
+        $query = $this->db->prepare('SELECT * FROM users');
             
         $query->execute();
     
         $getAllUsers = $query->fetchAll(PDO::FETCH_ASSOC);
+        
+        $getAllUsersArray = [];
+        foreach($getAllUsers as $getUser)
+        {
+            $newUserArray = new User($getUser["email"], $getUser["username"], $getUser["password"]);
+            $getAllUsersArray [] = $newUserArray;
+        }
             
-        $newUser = new User($getAllUsers["email"], $getAllUsers["username"], $getAllUsers["password"]);
-            
-        $newUser->setId($getAllUsers["id"]);
-            
-        return $newUser;
+        return $getAllUsersArray;
     }
     
     public function getUserById(int $id) : User
@@ -38,6 +46,8 @@ class UserManager extends AbstractManager
         
         $newUserById = new User($userById["id"], $userById["email"], $userById["username"], $userById["password"]);
         
+        $newUserById->setId($userById["id"]);
+        
         return $newUserById;
         
     }
@@ -47,7 +57,7 @@ class UserManager extends AbstractManager
         
         $this->db;
         
-        $query = $db->prepare('INSERT INTO users VALUES(null, :email, :username, :password)');
+        $query = $this->db->prepare('INSERT INTO users VALUES(null, :email, :username, :password)');
 
         $parameters = [
             
@@ -58,18 +68,21 @@ class UserManager extends AbstractManager
         ];
         
         $query->execute($parameters);
+        
+        return $user;
             
     }
     
     public function editUser(User $user) : void
     {
-        $query = $db->prepare("UPDATE users SET email = :email, username = :username, password = :password WHERE id = :id");
+        $query = $this->db->prepare("UPDATE users SET email = :email, username = :username, password = :password WHERE id = :id");
         
         $parameters = [
             
             'email' => $user->getEmail(),
             'username' => $user->getUsername(),
-            'password' => $user->getPassword()
+            'password' => $user->getPassword(),
+            'id' => $user->getId()
             
         ];
         
@@ -78,9 +91,6 @@ class UserManager extends AbstractManager
         $userUpdated = $query->fetch(PDO::FETCH_ASSOC);
         
         $newUserUpdated = new User($userUpdated["email"], $userUpdated["username"], $userUpdated["password"]);
-        
-        $newUserUpdated->setId($userUpdated["id"]);
-        
         
     }
 }

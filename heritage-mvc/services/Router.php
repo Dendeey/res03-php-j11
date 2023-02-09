@@ -1,5 +1,9 @@
 <?php
 
+// Requires //
+
+require "./controllers/UserController.php";
+
 class Router
 {
     
